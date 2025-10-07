@@ -1,50 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Расчет Дозы Облучения (Ядерный взрыв)</title>
+    <title>Розрахунок Дози Опромінення (Ядерний Вибух)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-        button { margin-top: 20px; padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-        #results { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9; border-radius: 4px; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 10px auto; /* Меньше отступов сверху для мобильных */
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px; /* Базовый размер шрифта увеличен */
+        }
+        h2 {
+            text-align: center;
+            font-size: 24px; /* Заголовок больше */
+        }
+        label {
+            display: block;
+            margin-top: 15px; /* Больше отступ между полями */
+            font-weight: bold;
+            font-size: 18px; /* Шрифт подписей увеличен */
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            font-size: 18px; /* Шрифт в поле ввода увеличен */
+            background-color: #f0f0f0; /* Светло-серый фон */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 25px;
+            padding: 12px 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 20px; /* Кнопка больше для удобного нажатия */
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #results {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #e9e9e9; /* Светлее фон для результатов */
+            border-radius: 4px;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>Расчет дозы облучения (ЯВ)</h2>
+    <h2>Розрахунок дози опромінення (ЯВ)</h2>
 
-    <label for="Pt">Мощность дозы при замере (Pt, мЗв/ч):</label>
+    <label for="Pt">Потужність дози при замірі (Pt, мЗв/год):</label>
     <input type="number" id="Pt" value="37">
 
-    <label for="t_izmereniya">Время замера (t, часы после взрыва):</label>
+    <label for="t_izmereniya">Час заміру (t, години після вибуху):</label>
     <input type="number" id="t_izmereniya" value="1">
 
-    <label for="t_nachalo">Начало облучения (t_нач, часы после взрыва):</label>
+    <label for="t_nachalo">Початок опромінення (t_поч, години після вибуху):</label>
     <input type="number" id="t_nachalo" value="2">
 
-    <label for="t_konec">Конец облучения (t_кон, часы после взрыва):</label>
+    <label for="t_konec">Кінець опромінення (t_кін, години після вибуху):</label>
     <input type="number" id="t_konec" value="3">
 
-    <button onclick="performCalculation()">Рассчитать дозу</button>
+    <button onclick="performCalculation()">Розрахувати дозу</button>
 
     <div id="results">
-        <p><strong>P1 (Мощность через 1 час):</strong> <span id="P1_result">-</span> мЗв/ч</p>
-        <p><strong>D (Доза за период):</strong> <span id="Dose_result">-</span> мЗв</p>
+        <p><strong>P1 (Потужність через 1 годину):</strong> <span id="P1_result">-</span> мЗв/год</p>
+        <p><strong>D (Доза за період):</strong> <span id="Dose_result">-</span> мЗв</p>
     </div>
 
     <script>
-        // Адаптированная функция для интерфейса
+        // Функція для розрахунку дози (D)
         function calculateDose(P1, t_nach, t_kon) {
             const n = 1.2;
             const exponent = 1 - n; // -0.2
 
-            // Формула интегрирования: D = [P1 * t_nach^(1-n) / (1-n)] * [1 - (t_nach / t_kon)^(1-n)]
+            // Формула інтегрування
             const first_term = (P1 * Math.pow(t_nach, exponent)) / exponent;
             const second_term = (t_nach / t_kon);
             
-            // Если t_nach = t_kon, доза равна 0. Если P1 = 0, доза равна 0.
+            // Захист від некоректних даних
             if (t_nach >= t_kon || P1 <= 0 || t_nach <= 0) return 0;
 
             const D = first_term * (1 - Math.pow(second_term, exponent));
@@ -52,27 +98,27 @@
         }
 
         function performCalculation() {
-            // Считывание данных из полей ввода
+            // Зчитування даних
             const Pt = parseFloat(document.getElementById('Pt').value);
             const t_izmereniya = parseFloat(document.getElementById('t_izmereniya').value);
             const t_nachalo = parseFloat(document.getElementById('t_nachalo').value);
             const t_konec = parseFloat(document.getElementById('t_konec').value);
 
-            // Проверка на корректность входных данных
+            // Перевірка введених даних
             if (isNaN(Pt) || isNaN(t_izmereniya) || isNaN(t_nachalo) || isNaN(t_konec) || t_izmereniya <= 0 || t_nachalo <= 0 || t_konec <= 0 || t_nachalo >= t_konec) {
-                document.getElementById('P1_result').textContent = 'Ошибка ввода!';
-                document.getElementById('Dose_result').textContent = 'Проверьте данные.';
+                document.getElementById('P1_result').textContent = 'Помилка введення!';
+                document.getElementById('Dose_result').textContent = 'Перевірте дані.';
                 return;
             }
 
-            // 1. Расчет P1 (мощность дозы через 1 час)
+            // 1. Розрахунок P1
             const n = 1.2;
             const P1 = Pt * Math.pow(t_izmereniya, n);
 
-            // 2. Расчет Дозы D
+            // 2. Розрахунок Дози D
             const Dose_result_mSv = calculateDose(P1, t_nachalo, t_konec);
 
-            // Вывод результатов
+            // Виведення результатів
             document.getElementById('P1_result').textContent = P1.toFixed(2);
             document.getElementById('Dose_result').textContent = Dose_result_mSv.toFixed(2);
         }
