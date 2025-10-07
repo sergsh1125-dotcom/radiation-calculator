@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Расчет Дозы Облучения (Ядерный взрыв)</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input[type="number"] { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { margin-top: 20px; padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        #results { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background-color: #f9f9f9; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <h2>Расчет дозы облучения (ЯВ)</h2>
+
+    <label for="Pt">Мощность дозы при замере (Pt, мЗв/ч):</label>
+    <input type="number" id="Pt" value="37">
+
+    <label for="t_izmereniya">Время замера (t, часы после взрыва):</label>
+    <input type="number" id="t_izmereniya" value="1">
+
+    <label for="t_nachalo">Начало облучения (t_нач, часы после взрыва):</label>
+    <input type="number" id="t_nachalo" value="2">
+
+    <label for="t_konec">Конец облучения (t_кон, часы после взрыва):</label>
+    <input type="number" id="t_konec" value="3">
+
+    <button onclick="performCalculation()">Рассчитать дозу</button>
+
+    <div id="results">
+        <p><strong>P1 (Мощность через 1 час):</strong> <span id="P1_result">-</span> мЗв/ч</p>
+        <p><strong>D (Доза за период):</strong> <span id="Dose_result">-</span> мЗв</p>
+    </div>
+
+    <script>
+        // Адаптированная функция для интерфейса
+        function calculateDose(P1, t_nach, t_kon) {
+            const n = 1.2;
+            const exponent = 1 - n; // -0.2
+
+            // Формула интегрирования: D = [P1 * t_nach^(1-n) / (1-n)] * [1 - (t_nach / t_kon)^(1-n)]
+            const first_term = (P1 * Math.pow(t_nach, exponent)) / exponent;
+            const second_term = (t_nach / t_kon);
+            
+            // Если t_nach = t_kon, доза равна 0. Если P1 = 0, доза равна 0.
+            if (t_nach >= t_kon || P1 <= 0 || t_nach <= 0) return 0;
+
+            const D = first_term * (1 - Math.pow(second_term, exponent));
+            return D;
+        }
+
+        function performCalculation() {
+            // Считывание данных из полей ввода
+            const Pt = parseFloat(document.getElementById('Pt').value);
+            const t_izmereniya = parseFloat(document.getElementById('t_izmereniya').value);
+            const t_nachalo = parseFloat(document.getElementById('t_nachalo').value);
+            const t_konec = parseFloat(document.getElementById('t_konec').value);
+
+            // Проверка на корректность входных данных
+            if (isNaN(Pt) || isNaN(t_izmereniya) || isNaN(t_nachalo) || isNaN(t_konec) || t_izmereniya <= 0 || t_nachalo <= 0 || t_konec <= 0 || t_nachalo >= t_konec) {
+                document.getElementById('P1_result').textContent = 'Ошибка ввода!';
+                document.getElementById('Dose_result').textContent = 'Проверьте данные.';
+                return;
+            }
+
+            // 1. Расчет P1 (мощность дозы через 1 час)
+            const n = 1.2;
+            const P1 = Pt * Math.pow(t_izmereniya, n);
+
+            // 2. Расчет Дозы D
+            const Dose_result_mSv = calculateDose(P1, t_nachalo, t_konec);
+
+            // Вывод результатов
+            document.getElementById('P1_result').textContent = P1.toFixed(2);
+            document.getElementById('Dose_result').textContent = Dose_result_mSv.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>
