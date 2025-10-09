@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Калькулятор дози опромінення (ядерний вибух)</title>
+    <title>Розрахунок Дози Опромінення (Ядерний Вибух)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -59,12 +59,12 @@
 </head>
 <body>
 
-    <h2>Калькулятор дози опромінення (ЯВ)</h2>
+    <h2>Розрахунок дози опромінення (ЯВ)</h2>
 
-    <label for="Pt">Потужність дози випромінювання за даними розвідки (Pt, мЗв/год):</label>
+    <label for="Pt">Потужність дози при замірі (Pt, мЗв/год):</label>
     <input type="number" id="Pt" value="0">
 
-    <label for="t_izmereniya">Час вимірювання Pt (t, години після вибуху):</label>
+    <label for="t_izmereniya">Час заміру (t, години після вибуху):</label>
     <input type="number" id="t_izmereniya" value="0">
 
     <label for="t_nachalo">Початок опромінення (t_поч, години після вибуху):</label>
@@ -90,16 +90,20 @@
     <button onclick="performCalculation()">Розрахувати дозу</button>
 
     <div id="results">
-        <p><strong>P1 (Потужність дози випромінювання через 1 годину):</strong> <span id="P1_result">-</span> мЗв/год</p>
+        <p><strong>P1 (Потужність через 1 годину):</strong> <span id="P1_result">-</span> мЗв/год</p>
         <p><strong>D (Доза зовнішня, без захисту):</strong> <span id="D_external_result">-</span> мЗв</p>
         <p><strong>D (Доза фактична, з Kз):</strong> <span id="Dose_result">-</span> мЗв</p>
+        <p style="font-size: 14px; color: #555;">(Коефіцієнт спаду $n=1.2$ для ЯВ)</p>
     </div>
 
     <script>
+        // Коефіцієнт спаду для ЯДЕРНОГО ВИБУХУ
+        const N_COEFFICIENT = 1.2; 
+
         // Функція для розрахунку дози (D) на відкритій місцевості
         function calculateDoseExternal(P1, t_nach, t_kon) {
-            const n = 1.2;
-            const exponent = 1 - n; // -0.2
+            const n = N_COEFFICIENT;
+            const exponent = 1 - n; // 1 - 1.2 = -0.2
 
             // Формула інтегрування
             const first_term = (P1 * Math.pow(t_nach, exponent)) / exponent;
@@ -118,7 +122,6 @@
             const t_izmereniya = parseFloat(document.getElementById('t_izmereniya').value);
             const t_nachalo = parseFloat(document.getElementById('t_nachalo').value);
             const t_konec = parseFloat(document.getElementById('t_konec').value);
-            // Зчитування коефіцієнта захисту (Kз)
             const Kz = parseFloat(document.getElementById('Kz').value);
 
 
@@ -130,8 +133,8 @@
                 return;
             }
 
-            // 1. Розрахунок P1
-            const n = 1.2;
+            // 1. Розрахунок P1. Формула: P1 = Pt * t^n
+            const n = N_COEFFICIENT;
             const P1 = Pt * Math.pow(t_izmereniya, n);
 
             // 2. Розрахунок Дози D на відкритій місцевості
