@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Розрахунок Дози Опромінення (Ядерний Вибух)</title>
+    <title>Калькулятор дози опромінення (ядерний вибух)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -59,12 +59,12 @@
 </head>
 <body>
 
-    <h2>Розрахунок дози опромінення (ЯВ)</h2>
+    <h2>Калькулятор дози опромінення (ЯВ)</h2>
 
-    <label for="Pt">Потужність дози при замірі (Pt, мЗв/год):</label>
+    <label for="Pt">Потужність дози випромінювання за даними розвідки на час t (Pt, мЗв/год):</label>
     <input type="number" id="Pt" value="0">
 
-    <label for="t_izmereniya">Час заміру (t, години після вибуху):</label>
+    <label for="t_izmereniya">Час вимірювання потужності дози (t, години після вибуху):</label>
     <input type="number" id="t_izmereniya" value="0">
 
     <label for="t_nachalo">Початок опромінення (t_поч, години після вибуху):</label>
@@ -90,9 +90,9 @@
     <button onclick="performCalculation()">Розрахувати дозу</button>
 
     <div id="results">
-        <p><strong>P1 (Потужність через 1 годину):</strong> <span id="P1_result">-</span> мЗв/год</p>
-        <p><strong>D (Доза зовнішня, без захисту):</strong> <span id="D_external_result">-</span> мЗв</p>
-        <p><strong>D (Доза фактична, з Kз):</strong> <span id="Dose_result">-</span> мЗв</p>
+        <p><strong>P1 (Потужність дози через 1 годину після ЯВ ):</strong> <span id="P1_result">-</span> мЗв/год</p>
+        <p><strong>D (Доза опромінення на відкритій місцевості):</strong> <span id="D_external_result">-</span> мЗв</p>
+        <p><strong>D (Доза опромінення з урахуванням Kз):</strong> <span id="Dose_result">-</span> мЗв</p>
         <p style="font-size: 14px; color: #555;">(Коефіцієнт спаду $n=1.2$ для ЯВ)</p>
     </div>
 
