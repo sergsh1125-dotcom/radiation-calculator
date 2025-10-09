@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>КАЛЬКУЛЯТОР дози зовнішнього опромінення (ядерний вибух)</title>
+    <title>Калькулятор дози опромінення після ядерного вибуху</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -59,19 +59,19 @@
 </head>
 <body>
 
-    <h2>КАЛЬКУЛЯТОР дози зовнішнього опромінення (ядерний вибух)</h2>
+    <h2>Калькулятор дози опромінення (ядерний вибух)</h2>
 
     <label for="Pt">Потужність дози на місцевості (Pt, мЗв/год):</label>
-    <input type="number" id="Pt" value="37">
+    <input type="number" id="Pt" value="0">
 
     <label for="t_izmereniya">Час вимірювання потужності дози (t, годин після ядерного вибуху):</label>
-    <input type="number" id="t_izmereniya" value="1">
+    <input type="number" id="t_izmereniya" value="0">
 
     <label for="t_nachalo">Початок опромінення (t_поч, годин після ядерного вибуху):</label>
-    <input type="number" id="t_nachalo" value="2">
+    <input type="number" id="t_nachalo" value="0">
 
     <label for="t_konec">Кінець опромінення (t_кін, годин після ядерного вибуху):</label>
-    <input type="number" id="t_konec" value="3">
+    <input type="number" id="t_konec" value="0">
 
     <button onclick="performCalculation()">Розрахувати дозу опромінення</button>
 
